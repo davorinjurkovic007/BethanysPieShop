@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,6 +13,8 @@ namespace BethanysPieShoo.Models
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string AllergyInfomation { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
         public string ImageThumbnailUrl { get; set; }
@@ -19,5 +22,7 @@ namespace BethanysPieShoo.Models
         public bool InStock { get; set; }
         public int  CategoryId { get; set; }
         public Category Category { get; set; }
+
+        public string Notes { get; set; }
     }
 }
