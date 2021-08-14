@@ -33,7 +33,18 @@ namespace BethanysPieShoo
 
             services.AddScoped<IPieRepository, PieRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
-            
+
+            // Why is this line very important?
+            // When the user now comes to my site, I'm going to create a scoped shopping cart using the GetCart methos.
+            // In other words, the GetCart method is going to be invoked when the user sends a request.
+            // That gives me the ability to check if the cart ID is already in the session, if not, I pass it into this seesion
+            // and I return the ShoppingCart itself down here.
+            // This way, I'm sure that when a user comes to the site, a shopping cart will be associated with the request.
+            // And since it's scoper, it means it all interacts with that same shopping cart, withing that same request, we'll use that
+            // same ShoppingCart.
+            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
+            services.AddSession();
+            services.AddHttpContextAccessor();
 
             // This will bring in support for working with MVC in our application.
             // It replace services.AddMVC() service call
@@ -51,6 +62,8 @@ namespace BethanysPieShoo
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseRouting();
 
