@@ -34,6 +34,8 @@ namespace BethanysPieShoo
             services.AddScoped<IPieRepository, PieRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+            services.AddScoped<IOrderRepository, OrderRepository>();
+
             // Why is this line very important?
             // When the user now comes to my site, I'm going to create a scoped shopping cart using the GetCart methos.
             // In other words, the GetCart method is going to be invoked when the user sends a request.
