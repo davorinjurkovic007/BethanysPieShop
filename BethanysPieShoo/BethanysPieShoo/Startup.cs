@@ -2,6 +2,7 @@ using BethanysPieShoo.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,6 +32,8 @@ namespace BethanysPieShoo
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<AppDbContext>();
+
             services.AddScoped<IPieRepository, PieRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
 
@@ -51,6 +54,11 @@ namespace BethanysPieShoo
             // This will bring in support for working with MVC in our application.
             // It replace services.AddMVC() service call
             services.AddControllersWithViews();
+
+            // Scaffolded identity uses Razor pages. 
+            // Because of that we actually need to bring in support for Razor Pages as well.
+            // Although you don't need it for anything else in your application, if is required because of the scaffolded files. 
+            services.AddRazorPages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,12 +76,15 @@ namespace BethanysPieShoo
             app.UseSession();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }
